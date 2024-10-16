@@ -89,7 +89,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in Attendances)
             {
-                if (attendance.CheckInTime.HasValue || attendance.CheckOutTime.HasValue || ValidAbsentDays >=0 )
+                if (attendance.CheckInTime.HasValue && attendance.CheckOutTime.HasValue || ValidAbsentDays >=0 )
                 {
                     AttendanceDays++;
                 }
