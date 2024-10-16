@@ -18,7 +18,6 @@ namespace ConsoleApp21
         public int OvertimeDays { get; private set; }
         public int LateTimes { get; private set; }
         public int AttendanceDays { get; private set; }
-        public TimeSpan OvertimeHours { get; private set; }
 
         // Thêm List để lưu trữ tất cả các báo cáo
         public static List<Report> AllReports { get; set; } = new List<Report>();
@@ -73,7 +72,7 @@ namespace ConsoleApp21
         }
         public void AddOvertimeDays() // tăng ca
         {
-            //nếu làm nhiều hơn giờ hành chính thì sẽ tăng OvertimeDays
+            
             OvertimeDays++;
         }
         public void AddLateTimes() // đi trễ
@@ -106,7 +105,6 @@ namespace ConsoleApp21
             Console.WriteLine($"Overtime Days: {OvertimeDays}");
             Console.WriteLine($"Late Times: {LateTimes}");
             Console.WriteLine($"Attendance Days: {AttendanceDays}");
-            Console.WriteLine($"Total Overtime Hours: {OvertimeHours}");
             Console.WriteLine("----------------------------");
         }
 
