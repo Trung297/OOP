@@ -37,9 +37,9 @@ namespace ConsoleApp21
             OvertimeHours = TimeSpan.Zero;
         }
         
-        public void ValidAbsent(Attendance attendance) // nghỉ có phép
+        public void ValidAbsent(List<Attendance> attendances) // nghỉ có phép
         {
-            if(!attendance.CheckInTime.HasValue && !attendance.CheckOutTime.HasValue)
+            if(!attendance.checkin && !attendance.checkout)
             {
                 if (ValidAbsentDays > 0)
                 {
@@ -52,15 +52,13 @@ namespace ConsoleApp21
                 }
             }
         }
-        public void AddInvalidAbsentDays() // nghỉ ko phép
+        public void AddInvalidAbsentDays(List<Attendance> attendances) // nghỉ ko phép
         {
-            int initialValidAbsentDays = ValidAbsentDays;
-
-            foreach (Attendance attendance in Attendances)
+            foreach (Attendance attendance in attendances)
             {
-                if(!attendance.CheckOutTime.HasValue && !attendance.CheckInTime.HasValue)
+                if(!attendance.checkin && !attendance.checkout)
                 {
-                    ValidAbsent(attendance);
+                    ValidAbsent(attendances);
 
                     if (ValidAbsentDays == 0)
                     {
@@ -70,26 +68,31 @@ namespace ConsoleApp21
                 }
             }
         }
-        public void AddOvertimeDays() // tăng ca
+        public void AddOvertimeDays(List<Attendance> attendances) // tăng ca
         {
-            
-            OvertimeDays++;
-        }
-        public void AddLateTimes() // đi trễ
-        {
-            foreach (Attendance attendance in Attendances)
+            foreach (Attendance attendance in attendances)
             {
-                if (attendance.CheckOutTime.HasValue)
+                if (attendance.checkout && attendance.checkouttime > attendance.defaulttimeout)
+                {
+                    OvertimeDays++;
+                }
+            }
+        }
+        public void AddLateTimes(List<Attendance> attendances) // đi trễ
+        {
+            foreach (Attendance attendance in attendances)
+            {
+                if (attendance.checkin && attendance.status == "late")
                 {
                     LateTimes++;
                 }
             }
         }
-        public void CalculateAttendanceDay() // tính tổng ngày đi làm 
+        public void CalculateAttendanceDay(List<Attendance> attendances) // tính tổng ngày đi làm 
         {
-            foreach (Attendance attendance in Attendances)
+            foreach (Attendance attendance in attendances)
             {
-                if (attendance.CheckInTime.HasValue && attendance.CheckOutTime.HasValue || ValidAbsentDays >=0 )
+                if (attendance.checkin && attendance.checkout)
                 {
                     AttendanceDays++;
                 }
