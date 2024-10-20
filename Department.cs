@@ -18,54 +18,37 @@ namespace ConsoleApp2
         Name = name;
         Description = description;
     }
-    public static List<Department> AllDepartments { get; set; } = new List<Department>();
-    public static void FindDepartment(int? departmentID = null, string name = null)
+
+    public static List<Department> Departments = new List<Department>();
+
+    public static Department FindDepartment(string departmentName)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        return Departments.FirstOrDefault(d => d.Name.Equals(departmentName, StringComparison.OrdinalIgnoreCase));
+    }
+    public static void DisplayEmployeeInDepartment(List<Employee> employees, string departmentName)
+    {
+        Department department = FindDepartment(departmentName);
+        if (department == null)
         {
-            Console.WriteLine("Please enter department name.");
+            Console.WriteLine("Không tìm thấy phòng ban với tên này.");
             return;
         }
 
-        List<Department> foundDepartments = AllDepartments.Where(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).ToList();
+        Console.WriteLine($"Nhân viên trong phòng ban: {department.Name}");
 
-        if (foundDepartments.Count > 0)
+
+        List<Employee> employeesInDepartment = employees.Where(e => e.DepartmentID() == department.DepartmentID.ToString()).ToList();
+
+        if (employeesInDepartment.Count == 0)
         {
-            Console.WriteLine($"Found department name: \"{name}\":");
-
-            foreach (Department dept in foundDepartments)
-            {
-                Console.WriteLine($"ID: {dept.DepartmentID}, Name: {dept.Name}, Description: {dept.Description}");
-                DisplayEmployeeInDepartment(dept.DepartmentID);
-            }
+            Console.WriteLine("Không có nhân viên nào trong phòng ban này.");
         }
         else
         {
-            Console.WriteLine($"Can not found department name: \"{name}\".");
-        }
-    }
-    public static void DisplayEmployeeInDepartment(int departmentID)
-    {
-        bool hasEmployees = false;
-
-        foreach (Employee employee in Employee.AllEmployees)
-        {
-            if (employee.DepartmentID == departmentID)
+            foreach (Employee emp in employeesInDepartment)
             {
-                Console.WriteLine($"Employee: Name = {employee.Name}, Age = {employee.Age}");
-
-                // Tìm báo cáo của nhân viên
-                Report report = Report.AllReports.Find(r => r.EmployeeID == employee.EmployeeID);
-                if (report != null)
-                {
-                    Console.WriteLine($"Invalid Absent Days = {report.InvalidAbsentDays}, Overtime Days = {report.OvertimeDays}, Late Times = {report.LateTimes}");
-                }
-                hasEmployees = true;
+                Console.WriteLine($"- {emp.EmployeeID()}: {emp.Name}");
             }
-        }
-        if (!hasEmployees)
-        {
-            Console.WriteLine("No employees found in this department.");
         }
     }
 }
