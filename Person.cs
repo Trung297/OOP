@@ -32,4 +32,9 @@ namespace ConsoleApp3
         }
 
     }
+    public void UpdateContactInfo(string phone_num, string address)
+    {
+        Phone_num = phone_num;
+        Address = address;
+    }
 }
