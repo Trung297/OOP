@@ -39,31 +39,23 @@ namespace ConsoleApp21
         
         public void ValidAbsent(List<Attendance> attendances) // nghỉ có phép
         {
-            if(!attendance.checkin && !attendance.checkout)
+            foreach (Attendance attendance in attendances)
             {
-                if (ValidAbsentDays > 0)
+                if (attendance.employeeID == EmployeeID && !attendance.checkin && attendance.date.Date == Date.Date)
                 {
-                    ValidAbsentDays--;
-                    Console.WriteLine($"Valid absent days remain:{ValidAbsentDays}");
-                }
-                else
-                {
-                    Console.WriteLine("Valid absent days remain: 0");
+                    ValidAbsentDays++;
                 }
             }
         }
         public void AddInvalidAbsentDays(List<Attendance> attendances) // nghỉ ko phép
         {
-            foreach (Attendance attendance in attendances)
+            if (ValidAbsentDays == 0)
             {
-                if(!attendance.checkin && !attendance.checkout)
+                foreach (Attendance attendance in attendances)
                 {
-                    ValidAbsent(attendances);
-
-                    if (ValidAbsentDays == 0)
+                    if (attendance.employeeID == EmployeeID && !attendance.checkin && attendance.date.Date == Date.Date)
                     {
                         InvalidAbsentDays++;
-                        Console.WriteLine($"invalid absent days: {InvalidAbsentDays}");
                     }
                 }
             }
@@ -72,7 +64,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.checkout && attendance.checkouttime > attendance.defaulttimeout)
+                if (attendance.employeeID == EmployeeID && attendance.checkout && attendance.ottime.TotalHours > 0)
                 {
                     OvertimeDays++;
                 }
@@ -82,7 +74,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.checkin && attendance.status == "late")
+                if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.status == "late")
                 {
                     LateTimes++;
                 }
@@ -90,9 +82,9 @@ namespace ConsoleApp21
         }
         public void CalculateAttendanceDay(List<Attendance> attendances) // tính tổng ngày đi làm 
         {
-            foreach (Attendance attendance in attendances)
+            foreach (var attendance in attendances)
             {
-                if (attendance.checkin && attendance.checkout)
+                if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.checkout)
                 {
                     AttendanceDays++;
                 }
