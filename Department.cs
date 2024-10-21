@@ -8,7 +8,7 @@ namespace ConsoleApp2
 {
     public class Department
 {
-    public string DepartmentID { get; private set; }
+    public string DepartmentID { get; }
     public string Name { get; set; }
     public string Description { get; set; }
 
