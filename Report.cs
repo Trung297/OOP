@@ -22,17 +22,15 @@ namespace ConsoleApp21
         // Thêm List để lưu trữ tất cả các báo cáo
         public static List<Report> AllReports { get; set; } = new List<Report>();
 
-        public Report(int reportID, string employeeID, DateTime date)
+        public Report()
         {
-            ReportID = reportID;
-            EmployeeID = employeeID;
-            Date = date;
             ValidAbsentDays = 12;
             InvalidAbsentDays = 0;
             OvertimeDays = 0;
             LateTimes = 0;
             AttendanceDays = 0;
-            // Thêm báo cáo mới vào List
+            Date = DateTime.Now;
+
             AllReports.Add(this);
         }
         
@@ -40,9 +38,9 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.employeeID == EmployeeID && !attendance.checkin && attendance.date.Date == Date.Date)
+                if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.date.Date == Date.Date)
                 {
-                    ValidAbsentDays++;
+                    ValidAbsentDays--;
                 }
             }
         }
@@ -52,7 +50,7 @@ namespace ConsoleApp21
             {
                 foreach (Attendance attendance in attendances)
                 {
-                    if (attendance.employeeID == EmployeeID && !attendance.checkin && attendance.date.Date == Date.Date)
+                    if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.date.Date == Date.Date)
                     {
                         InvalidAbsentDays++;
                     }
@@ -63,7 +61,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.employeeID == EmployeeID && attendance.checkout && attendance.ottime.TotalHours > 0)
+                if (attendance.employeeID == EmployeeID && !attendance.checkout && attendance.ottime.TotalHours > 0)
                 {
                     OvertimeDays++;
                 }
@@ -73,7 +71,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.status == "late")
+                if (attendance.employeeID == EmployeeID && !attendance.checkin && attendance.status == "late")
                 {
                     LateTimes++;
                 }
@@ -83,7 +81,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.checkout)
+                if (attendance.employeeID == EmployeeID && !attendance.checkin && !attendance.checkout)
                 {
                     AttendanceDays++;
                 }
