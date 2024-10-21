@@ -19,7 +19,7 @@ namespace ConsoleApp2
         Description = description;
     }
 
-    public List<Department> Departments = new List<Department>();
+    public static List<Department> Departments = new List<Department>();
 
     public Department FindDepartment(string departmentName)
     {
