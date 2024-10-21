@@ -34,7 +34,6 @@ namespace ConsoleApp21
             AttendanceDays = 0;
             // Thêm báo cáo mới vào List
             AllReports.Add(this);
-            OvertimeHours = TimeSpan.Zero;
         }
         
         public void ValidAbsent(List<Attendance> attendances) // nghỉ có phép
