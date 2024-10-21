@@ -19,9 +19,9 @@ namespace ConsoleApp2
         Description = description;
     }
 
-    public static List<Department> Departments = new List<Department>();
+    public List<Department> Departments = new List<Department>();
 
-    public static Department FindDepartment(string departmentName)
+    public Department FindDepartment(string departmentName)
     {
         foreach (Department department in Departments)
         {
@@ -32,7 +32,7 @@ namespace ConsoleApp2
         }
         return null;
     }
-    public static void DisplayEmployeeInDepartment(List<Employee> employees, string departmentName)
+    public void DisplayEmployeeInDepartment(List<Employee> employees, string departmentName)
     {
         Department department = FindDepartment(departmentName);
         if (department == null)
