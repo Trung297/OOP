@@ -82,7 +82,7 @@ namespace ConsoleApp21
         }
         public void CalculateAttendanceDay(List<Attendance> attendances) // tính tổng ngày đi làm 
         {
-            foreach (var attendance in attendances)
+            foreach (Attendance attendance in attendances)
             {
                 if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.checkout)
                 {
