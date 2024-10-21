@@ -10,7 +10,7 @@ namespace ConsoleApp21
     public class Report
     {
         public int ReportID { get; private set; }
-        public int EmployeeID { get; private set; }
+        public string EmployeeID { get; private set; }
         public string Content { get; private set; }
         public DateTime Date { get; private set; }
         public int ValidAbsentDays { get; private set; }
@@ -22,7 +22,7 @@ namespace ConsoleApp21
         // Thêm List để lưu trữ tất cả các báo cáo
         public static List<Report> AllReports { get; set; } = new List<Report>();
 
-        public Report(int reportID, int employeeID, DateTime date)
+        public Report(int reportID, string employeeID, DateTime date)
         {
             ReportID = reportID;
             EmployeeID = employeeID;
