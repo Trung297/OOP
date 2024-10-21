@@ -9,10 +9,10 @@ namespace ConsoleApp21
 {
     public class Report
     {
-        public int ReportID { get; set; }
-        public int EmployeeID { get; set; }
-        public string Content { get; set; }
-        public DateTime Date { get; set; }
+        public int ReportID { get; private set; }
+        public int EmployeeID { get; private set; }
+        public string Content { get; private set; }
+        public DateTime Date { get; private set; }
         public int ValidAbsentDays { get; private set; }
         public int InvalidAbsentDays { get; private set; }
         public int OvertimeDays { get; private set; }
