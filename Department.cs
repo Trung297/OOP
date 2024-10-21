@@ -8,11 +8,11 @@ namespace ConsoleApp2
 {
     public class Department
 {
-    public int DepartmentID { get; set; }
+    public string DepartmentID { get; private set; }
     public string Name { get; set; }
     public string Description { get; set; }
 
-    public Department(int departmentID, string name, string description)
+    public Department(string departmentID, string name, string description)
     {
         DepartmentID = departmentID;
         Name = name;
@@ -23,25 +23,39 @@ namespace ConsoleApp2
 
     public static Department FindDepartment(string departmentName)
     {
-        return Departments.FirstOrDefault(d => d.Name.Equals(departmentName, StringComparison.OrdinalIgnoreCase));
+        foreach (Department department in Departments)
+        {
+            if (string.Equals(department.Name, departmentName, StringComparison.OrdinalIgnoreCase))
+            {
+                return department;
+            }
+        }
+        return null;
     }
     public static void DisplayEmployeeInDepartment(List<Employee> employees, string departmentName)
     {
         Department department = FindDepartment(departmentName);
         if (department == null)
         {
-            Console.WriteLine("Không tìm thấy phòng ban với tên này.");
+            Console.WriteLine("Khong tim thay phong ban voi ten nay.");
             return;
         }
 
-        Console.WriteLine($"Nhân viên trong phòng ban: {department.Name}");
+        Console.WriteLine($"Nhan vien trong phong ban: {department.Name}");
 
-
-        List<Employee> employeesInDepartment = employees.Where(e => e.DepartmentID() == department.DepartmentID.ToString()).ToList();
+        List<Employee> employeesInDepartment = new List<Employee>();
+        
+        foreach (Employee emp in employees)
+        {
+            if (emp.DepartmentID() == department.DepartmentID)
+            {
+                employeesInDepartment.Add(emp);
+            }
+        }
 
         if (employeesInDepartment.Count == 0)
         {
-            Console.WriteLine("Không có nhân viên nào trong phòng ban này.");
+            Console.WriteLine("Khong co nhan vien nao trong phong ban nay.");
         }
         else
         {
