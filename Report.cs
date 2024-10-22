@@ -38,7 +38,7 @@ namespace ConsoleApp21
         {
             foreach (Attendance attendance in attendances)
             {
-                if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.date.Date == Date.Date)
+                if (attendance.employeeID == EmployeeID && attendance.checkin)
                 {
                     ValidAbsentDays--;
                 }
@@ -50,7 +50,7 @@ namespace ConsoleApp21
             {
                 foreach (Attendance attendance in attendances)
                 {
-                    if (attendance.employeeID == EmployeeID && attendance.checkin && attendance.date.Date == Date.Date)
+                    if (attendance.employeeID == EmployeeID && attendance.checkin)
                     {
                         InvalidAbsentDays++;
                     }
