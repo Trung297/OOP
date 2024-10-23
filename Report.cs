@@ -1,105 +1,120 @@
-﻿using System;
+using projectending;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
-namespace ConsoleApp21
+namespace _Project__Atendence_Program
 {
     public class Report
-    {
-        public int ReportID { get; private set; }
-        public string EmployeeID { get; private set; }
-        public string Content { get; private set; }
-        public DateTime Date { get; private set; }
-        public int ValidAbsentDays { get; private set; }
-        public int InvalidAbsentDays { get; private set; }
-        public int OvertimeDays { get; private set; }
-        public int LateTimes { get; private set; }
-        public int AttendanceDays { get; private set; }
-
-        // Thêm List để lưu trữ tất cả các báo cáo
-        public static List<Report> AllReports { get; set; } = new List<Report>();
-
-        public Report()
         {
-            ValidAbsentDays = 12;
-            InvalidAbsentDays = 0;
-            OvertimeDays = 0;
-            LateTimes = 0;
-            AttendanceDays = 0;
-            Date = DateTime.Now;
+            public int ReportID { get; private set; }
+            public string Content { get; private set; }
+            public DateTime Date { get; private set; }
+            public int ValidAbsentDays { get; private set; }
+            public int InvalidAbsentDays { get; private set; }
+            public int OvertimeDays { get; private set; }
+            public int LateTimes { get; private set; }
+            public int AttendanceDays { get; private set; }
 
-            AllReports.Add(this);
-        }
-        
-        public void ValidAbsent(List<Attendance> attendances) // nghỉ có phép
-        {
-            foreach (Attendance attendance in attendances)
+            // Thêm List để lưu trữ tất cả các báo cáo
+            public static List<Report> AllReports { get; set; } = new List<Report>();
+
+            public Report()
             {
-                if (attendance.employeeID == EmployeeID && attendance.checkin)
-                {
-                    ValidAbsentDays--;
-                }
+                ValidAbsentDays = 12;
+                InvalidAbsentDays = 0;
+                OvertimeDays = 0;
+                LateTimes = 0;
+                AttendanceDays = 0;
+                Date = DateTime.Now;
+
+                AllReports.Add(this);
             }
-        }
-        public void AddInvalidAbsentDays(List<Attendance> attendances) // nghỉ ko phép
-        {
-            if (ValidAbsentDays == 0)
+
+            public void ValidAbsent(string employeeID, Dictionary<string, List<Attendance>> attendanceRecords) // nghỉ có phép
             {
-                foreach (Attendance attendance in attendances)
+                if (attendanceRecords.ContainsKey(employeeID))
                 {
-                    if (attendance.employeeID == EmployeeID && attendance.checkin)
+                    List<Attendance> attendances = attendanceRecords[employeeID];
+                    foreach (Attendance attendance in attendances)
                     {
-                        InvalidAbsentDays++;
+                        if (attendance.CheckIn)
+                        {
+                            ValidAbsentDays--;
+                        }
                     }
                 }
             }
-        }
-        public void AddOvertimeDays(List<Attendance> attendances) // tăng ca
-        {
-            foreach (Attendance attendance in attendances)
+            public void AddInvalidAbsentDays(string employeeID, Dictionary<string, List<Attendance>> attendanceRecords) // nghỉ ko phép
             {
-                if (attendance.employeeID == EmployeeID && !attendance.checkout && attendance.ottime.TotalHours > 0)
+                if (ValidAbsentDays == 0 && attendanceRecords.ContainsKey(employeeID))
                 {
-                    OvertimeDays++;
+                    List<Attendance> attendances = attendanceRecords[employeeID];
+                    foreach (Attendance attendance in attendances)
+                    {
+                        if (!attendance.CheckIn)
+                        {
+                            InvalidAbsentDays++;
+                        }
+                    }
                 }
             }
-        }
-        public void AddLateTimes(List<Attendance> attendances) // đi trễ
-        {
-            foreach (Attendance attendance in attendances)
+            public void AddOvertimeDays(string employeeID, Dictionary<string, List<Attendance>> attendanceRecords) // tăng ca
             {
-                if (attendance.employeeID == EmployeeID && !attendance.checkin && attendance.status == "late")
+                if (attendanceRecords.ContainsKey(employeeID))
                 {
-                    LateTimes++;
+                    List<Attendance> attendances = attendanceRecords[employeeID];
+                    foreach (Attendance attendance in attendances)
+                    {
+                        if (!attendance.CheckOut && attendance.OtTime.TotalHours > 0)
+                        {
+                            OvertimeDays++;
+                        }
+                    }
                 }
             }
-        }
-        public void CalculateAttendanceDay(List<Attendance> attendances) // tính tổng ngày đi làm 
-        {
-            foreach (Attendance attendance in attendances)
+            public void AddLateTimes(string employeeID, Dictionary<string, List<Attendance>> attendanceRecords) // đi trễ
             {
-                if (attendance.employeeID == EmployeeID && !attendance.checkin && !attendance.checkout)
+                if (attendanceRecords.ContainsKey(employeeID))
                 {
-                    AttendanceDays++;
+                    List<Attendance> attendances = attendanceRecords[employeeID];
+                    foreach (Attendance attendance in attendances)
+                    {
+                        if (!attendance.CheckIn && attendance.Status == "late")
+                        {
+                            LateTimes++;
+                        }
+                    }
                 }
             }
-        }
-        public void DisplayReport()
-        {
-            Console.WriteLine($"Report ID: {ReportID}");
-            Console.WriteLine($"Employee ID: {EmployeeID}");
-            Console.WriteLine($"Date: {Date.ToShortDateString()}");
-            Console.WriteLine($"Valid Absent Days Remain: {ValidAbsentDays}");
-            Console.WriteLine($"Invalid Absent Days: {InvalidAbsentDays}");
-            Console.WriteLine($"Overtime Days: {OvertimeDays}");
-            Console.WriteLine($"Late Times: {LateTimes}");
-            Console.WriteLine($"Attendance Days: {AttendanceDays}");
-            Console.WriteLine("----------------------------");
-        }
 
-    }
+            public void CalculateAttendanceDay(string employeeID, Dictionary<string, List<Attendance>> attendanceRecords) // tính tổng ngày đi làm
+            {
+                if (attendanceRecords.ContainsKey(employeeID))
+                {
+                    List<Attendance> attendances = attendanceRecords[employeeID];
+                    foreach (Attendance attendance in attendances)
+                    {
+                        if (!attendance.CheckIn && !attendance.CheckOut)
+                        {
+                            AttendanceDays++;
+                        }
+                    }
+                }
+            }
+        public void DisplayReport()
+            {
+                Console.WriteLine($"Report ID: {ReportID}");
+                Console.WriteLine($"Date: {Date.ToShortDateString()}");
+                Console.WriteLine($"Valid Absent Days Remain: {ValidAbsentDays}");
+                Console.WriteLine($"Invalid Absent Days: {InvalidAbsentDays}");
+                Console.WriteLine($"Overtime Days: {OvertimeDays}");
+                Console.WriteLine($"Late Times: {LateTimes}");
+                Console.WriteLine($"Attendance Days: {AttendanceDays}");
+                Console.WriteLine("----------------------------");
+            }
+
+        }
     
 }
